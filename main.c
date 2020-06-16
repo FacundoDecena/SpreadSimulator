@@ -18,7 +18,7 @@
 #define ELDER_SUSCEPTIBILITY 0.9    // enhancers
 #define RISK_FACTOR 0.15            // enhancers
 #define VACCINES_BOOST 0.005        // enhancers
-#define SIZE 13                    // Matrix size for rows and columns
+#define SIZE 1500                   // Matrix size for rows and columns
 
 // Returns a initialize person
 Person generatePerson();
@@ -55,6 +55,10 @@ int main() {
     srand(time(0));
     Person *neighborhood = (Person *) malloc(sizeof(Person) * 9);
     int indexes[9];
+    clock_t start, end;
+    double cpu_time_used;
+
+    start = clock();
     for (i = 0; i < DAYS; i++) {
         for (j = 0; j < SIZE * SIZE; j++) {
             neighbors(j, indexes);
@@ -67,11 +71,11 @@ int main() {
             neighborhood[6] = lastMatrix[indexes[6]];
             neighborhood[7] = lastMatrix[indexes[7]];
             neighborhood[8] = lastMatrix[indexes[8]];
-            if (i == 0||i == DAYS - 1) {
-                printf("%d ", neighborhood[4].state);
-                if ((j+1) % SIZE == 0)
-                    printf("\n");
-            }
+//            if (i == 0||i == DAYS - 1) {
+//                printf("%d ", neighborhood[4].state);
+//                if ((j+1) % SIZE == 0)
+//                    printf("\n");
+//            }
             switch (neighborhood[4].state) {
                 case freeCell:
                     continue;
@@ -95,12 +99,15 @@ int main() {
             sickToD_or_R(&neighborhood[4]);
             matrix[j] = neighborhood[4];
         }
-        if (i == DAYS - 2) {
-            printf("\n");
-            printf("\n");
-        }
+//        if (i == DAYS - 2) {
+//            printf("\n");
+//            printf("\n");
+//        }
         lastMatrix = matrix;
     }
+    end = clock();
+    cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+    printf("Tiempo transcurrido: %lf\n\n", cpu_time_used);
 
     return 0;
 }
