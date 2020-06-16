@@ -1,0 +1,11 @@
+/home/facundo/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/201.7846.88/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=/usr/bin/mpicc -G "CodeBlocks - Unix Makefiles" /media/facundo/Datos/LoQueUso/UNSL/2020/Primer-Cuatrimestre/Paralelos/PracticoFinal/COVID-19
+-- The C compiler identification is GNU 9.3.0
+-- Check for working C compiler: /usr/bin/mpicc
+-- Check for working C compiler: /usr/bin/mpicc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /media/facundo/Datos/LoQueUso/UNSL/2020/Primer-Cuatrimestre/Paralelos/PracticoFinal/COVID-19/cmake-build-debug
