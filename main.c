@@ -5,20 +5,20 @@
 
 #define FALSE 0
 #define TRUE 1
-#define DAYS 120                // numbers of days
-#define DENSITY 0.50            // population density
-#define INITIAL_INFECTION 0.002  // % of initial cases
-#define KIDS 0.30               // % of the population
-#define ADULTS 0.54             // % of the population
-//      ELDERS 0.16             // % of the population
+#define DAYS 120                    // numbers of days
+#define DENSITY 0.50                // population density
+#define INITIAL_INFECTION 0.002     // % of initial cases
+#define KIDS 0.30                   // % of the population
+#define ADULTS 0.54                 // % of the population
+//      ELDERS 0.16                 // % of the population
 
-#define ILLNESS_STRENGTH 2.4     // enhancers
-#define KID_SUSCEPTIBILITY 0.3  // enhancers
-#define ADULT_SUSCEPTIBILITY 0.5// enhancers
-#define ELDER_SUSCEPTIBILITY 0.9// enhancers
-#define RISK_FACTOR 0.15        // enhancers
+#define ILLNESS_STRENGTH 2.4        // enhancers
+#define KID_SUSCEPTIBILITY 0.3      // enhancers
+#define ADULT_SUSCEPTIBILITY 0.5    // enhancers
+#define ELDER_SUSCEPTIBILITY 0.9    // enhancers
+#define RISK_FACTOR 0.15            // enhancers
 #define VACCINES_BOOST 0.005        // enhancers
-#define SIZE 6            // Matrix size for rows and columns
+#define SIZE 13                    // Matrix size for rows and columns
 
 // Returns a initialize person
 Person generatePerson();
@@ -46,8 +46,6 @@ int sickToD_or_R(Person *p);
 // returns an array with de indexes of the neighbors of a given index
 void neighbors(int index, int *n);
 
-int modulo(int, int);
-
 int main() {
     int i, j;
     Person *matrix = (Person *) malloc(sizeof(Person) * SIZE * SIZE);
@@ -55,11 +53,10 @@ int main() {
     init(matrix);
     lastMatrix = matrix;
     srand(time(0));
-
     Person *neighborhood = (Person *) malloc(sizeof(Person) * 9);
     int indexes[9];
     for (i = 0; i < DAYS; i++) {
-        for (j = 0; j < SIZE*SIZE; j++) {
+        for (j = 0; j < SIZE * SIZE; j++) {
             neighbors(j, indexes);
             neighborhood[0] = lastMatrix[indexes[0]];
             neighborhood[1] = lastMatrix[indexes[1]];
@@ -70,13 +67,11 @@ int main() {
             neighborhood[6] = lastMatrix[indexes[6]];
             neighborhood[7] = lastMatrix[indexes[7]];
             neighborhood[8] = lastMatrix[indexes[8]];
-
-            if (i == 0 || i == DAYS-1){
-                printf("%d ",neighborhood[4].state);
-                if (modulo(j+1,SIZE) == 0)
+            if (i == 0||i == DAYS - 1) {
+                printf("%d ", neighborhood[4].state);
+                if ((j+1) % SIZE == 0)
                     printf("\n");
             }
-
             switch (neighborhood[4].state) {
                 case freeCell:
                     continue;
@@ -100,7 +95,8 @@ int main() {
             sickToD_or_R(&neighborhood[4]);
             matrix[j] = neighborhood[4];
         }
-        if (i == DAYS-2){
+        if (i == DAYS - 2) {
+            printf("\n");
             printf("\n");
         }
         lastMatrix = matrix;
@@ -111,46 +107,46 @@ int main() {
 
 Person generatePerson() {
     Person p;
-    double rand = (double) random() / (double) RAND_MAX;
-    if (rand > DENSITY) {
+    double ran = (double) rand() / (double) RAND_MAX;
+    if (ran > DENSITY) {
         p.state = freeCell;
         return p;
     }
 
-    rand = (double) random() / (double) RAND_MAX;
-    if (rand < KIDS)
+    ran = (double) random() / (double) RAND_MAX;
+    if (ran < KIDS)
         p.age = kid;
-    else if (rand < KIDS + ADULTS)
+    else if (ran < KIDS + ADULTS)
         p.age = adult;
     else
         p.age = elder;
 
-    rand = (double) random() / (double) RAND_MAX;
-    if (rand < 0.5)
+    ran = (double) random() / (double) RAND_MAX;
+    if (ran < 0.5)
         p.riskDisease = FALSE;
     else
         p.riskDisease = TRUE;
 
-    rand = (double) random() / (double) RAND_MAX;
-    if (rand < 0.5)
+    ran = (double) random() / (double) RAND_MAX;
+    if (ran < 0.5)
         p.riskProfession = FALSE;
     else
         p.riskProfession = TRUE;
 
-    rand = (double) random() / (double) RAND_MAX;
-    if (rand < 0.5)
+    ran = (double) random() / (double) RAND_MAX;
+    if (ran < 0.5)
         p.sex = man;
     else
         p.sex = woman;
 
-    rand = (double) random() / (double) RAND_MAX;
-    if (rand < 0.5)
+    ran = (double) random() / (double) RAND_MAX;
+    if (ran < 0.5)
         p.vaccines = TRUE;
     else
         p.vaccines = FALSE;
 
-    rand = (double) random() / (double) RAND_MAX;
-    if (rand < INITIAL_INFECTION)
+    ran = (double) random() / (double) RAND_MAX;
+    if (ran < INITIAL_INFECTION)
         p.state = sickContagion;
     else
         p.state = susceptible;
@@ -168,113 +164,77 @@ void init(Person *matrix) {
 }
 
 void neighbors(int index, int *n) {
-    //Caso normal
-    if (modulo(index, SIZE) != 0 && modulo(index, SIZE - 1) != 0) {
-        n[0] = index - SIZE - 1;
-        n[1] = index - SIZE;
-        n[2] = index - SIZE + 1;
-        n[3] = index - 1;
-        n[4] = index;
-        n[5] = index + 1;
-        n[6] = index + SIZE - 1;
-        n[7] = index + SIZE;
-        n[8] = index + SIZE + 1;
-    }
+    n[0] = index - SIZE - 1;
+    n[1] = index - SIZE;
+    n[2] = index - SIZE + 1;
+    n[3] = index - 1;
+    n[4] = index;
+    n[5] = index + 1;
+    n[6] = index + SIZE - 1;
+    n[7] = index + SIZE;
+    n[8] = index + SIZE + 1;
     //Lados
-    if (modulo(index, SIZE) == 0) {
+    if (index % SIZE == 0) {
+        if (index == 0) {
+            n[0] = SIZE * SIZE - 1;
+            n[1] = SIZE * SIZE - SIZE;
+            n[2] = SIZE * SIZE - SIZE + 1;
+            n[3] = SIZE - 1;
+            n[6] = 2 * SIZE - 1;
+            return;
+        }
+        if (index == SIZE * SIZE - SIZE) {
+            n[0] = index - 1;
+            n[3] = SIZE * SIZE - 1;
+            n[6] = SIZE - 1;
+            n[7] = 0;
+            n[8] = 1;
+            return;
+        }
         n[0] = index - 1;
-        n[1] = index - SIZE;
-        n[2] = index - SIZE + 1;
         n[3] = index + SIZE - 1;
-        n[4] = index;
-        n[5] = index + 1;
         n[6] = index + 2 * SIZE - 1;
-        n[7] = index + SIZE;
-        n[8] = index + SIZE + 1;
+        return;
     }
-    if (modulo(index, SIZE - 1) == 0) {
-        n[0] = index - SIZE - 1;
-        n[1] = index - SIZE;
+    if ((index + 1) % SIZE == 0) {
+        if (index == SIZE - 1) {
+            n[0] = SIZE * SIZE - 2;
+            n[1] = SIZE * SIZE - 1;
+            n[2] = SIZE * SIZE - SIZE;
+            n[5] = 0;
+            n[8] = index + 1;
+            return;
+        }
+        if (index == SIZE * SIZE - 1) {
+            n[2] = index - 2 * SIZE + 1;
+            n[5] = SIZE * SIZE - SIZE;
+            n[6] = SIZE - 2;
+            n[7] = SIZE - 1;
+            n[8] = 0;
+            return;
+        }
         n[2] = index + 1 - 2 * SIZE;
-        n[3] = index - 1;
-        n[4] = index;
         n[5] = index + 1 - SIZE;
-        n[6] = index + SIZE - 1;
-        n[7] = index + SIZE;
         n[8] = index + 1;
+        return;
     }
     if (0 < index && index < SIZE - 1) {
         n[0] = index - 1 + SIZE * SIZE - SIZE;
         n[1] = index + 0 + SIZE * SIZE - SIZE;
         n[2] = index + 1 + SIZE * SIZE - SIZE;
-        n[3] = index - 1;
-        n[4] = index;
-        n[5] = index + 1;
-        n[6] = index + SIZE - 1;
-        n[7] = index + SIZE;
-        n[8] = index + SIZE + 1;
+        return;
     }
     if (SIZE * SIZE - SIZE < index && index < SIZE * SIZE - 1) {
-        n[0] = index - SIZE - 1;
-        n[1] = index - SIZE;
-        n[2] = index - SIZE + 1;
-        n[3] = index - 1;
-        n[4] = index;
-        n[5] = index + 1;
         n[6] = index - 1 - SIZE * SIZE + SIZE;
         n[7] = index + 0 - SIZE * SIZE + SIZE;
         n[8] = index + 1 - SIZE * SIZE + SIZE;
-    }
-    // Esquinas
-    if (index == 0) {
-        n[0] = SIZE * SIZE - 1;
-        n[1] = SIZE * SIZE - SIZE;
-        n[2] = SIZE * SIZE - SIZE + 1;
-        n[3] = SIZE - 1;
-        n[4] = 0;
-        n[5] = 1;
-        n[6] = 2 * SIZE - 1;
-        n[7] = SIZE;
-        n[8] = SIZE + 1;
-    }
-    if (index == SIZE - 1) {
-        n[0] = SIZE * SIZE - 2;
-        n[1] = SIZE * SIZE - 1;
-        n[2] = SIZE * SIZE - SIZE;
-        n[3] = index - 1;
-        n[4] = index;
-        n[5] = 0;
-        n[6] = index + SIZE - 1;
-        n[7] = index + SIZE;
-        n[8] = index + 1;
-    }
-    if (index == SIZE * SIZE - SIZE) {
-        n[0] = index - 1;
-        n[1] = index - SIZE;
-        n[2] = index - SIZE + 1;
-        n[3] = SIZE * SIZE - 1;
-        n[4] = index;
-        n[5] = index + 1;
-        n[6] = SIZE - 1;
-        n[7] = 0;
-        n[8] = 1;
-    }
-    if (index == SIZE * SIZE - 1) {
-        n[0] = index - SIZE - 1;
-        n[1] = index - SIZE;
-        n[2] = index - 2 * SIZE + 1;
-        n[3] = index - 1;
-        n[4] = index;
-        n[5] = SIZE * SIZE - SIZE;
-        n[6] = SIZE - 2;
-        n[7] = SIZE - 1;
-        n[8] = 0;
+        return;
     }
 }
 
 int susToSick(Person *matrix, Person *p) {
-    int i;
-    double probContagion, sickNeighbors = 0, ageSusceptibility;
+    int i, sickNeighbors = 0;
+    double probContagion = 0.0, ageSusceptibility;
 
     switch (p->age) {
         case kid:
@@ -292,14 +252,15 @@ int susToSick(Person *matrix, Person *p) {
         if (i == 5) continue;
         if (matrix[i].state == sickContagion) sickNeighbors += 1;
     }
+    if (sickNeighbors != 0) {
+        probContagion = ((double) sickNeighbors / 8 * ILLNESS_STRENGTH) + ageSusceptibility;
 
-    probContagion = (sickNeighbors / 8 * ILLNESS_STRENGTH) + ageSusceptibility;
+        if (p->riskDisease) probContagion += RISK_FACTOR;
 
-    if (p->riskDisease) probContagion += RISK_FACTOR;
+        if (p->riskProfession) probContagion += RISK_FACTOR;
 
-    if (p->riskProfession) probContagion += RISK_FACTOR;
-
-    probContagion /= 7;
+        probContagion /= 7;
+    }
 
     if ((double) random() / (double) RAND_MAX < probContagion) {
         p->state = sickNoContagion;
@@ -309,22 +270,22 @@ int susToSick(Person *matrix, Person *p) {
 
 }
 
-int noConToCon(Person *p){
+int noConToCon(Person *p) {
     if (p->days == 4)
         p->state = sickContagion;
 }
 
-int conToAis(Person *p){
+int conToAis(Person *p) {
     double rand = (double) random() / (double) RAND_MAX;
-    if (p->days == 6){
+    if (p->days == 7) {
         if (rand > 0.1)
             p->state = isolatedSick;
     }
 }
 
-int sickToD_or_R(Person *p){
+int sickToD_or_R(Person *p) {
     double rand = (double) random() / (double) RAND_MAX;
-    if (p->days == 14){
+    if (p->days == 14) {
         double probDead;
         switch (p->age) {
             case kid:
@@ -345,28 +306,3 @@ int sickToD_or_R(Person *p){
         p->days = 0;
     }
 }
-
-int modulo(int a, int b) {
-    if (a < 0)
-        a += b;
-    if (a < b)
-        return a;
-    while (a >= b) {
-        a -= b;
-    }
-    return a;
-}
-
-/*
-0 0 0 0 3
-0 3 0 0 0
-0 0 0 0 3
-0 0 3 1 1
-0 3 1 3 0
-
-6 0 0 0 6
-0 5 0 0 0
-0 0 0 0 6
-0 0 6 6 6
-0 6 6 6 0
- */
