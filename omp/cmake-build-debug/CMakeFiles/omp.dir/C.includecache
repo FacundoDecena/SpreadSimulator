@@ -7,13 +7,13 @@
 #IncludeRegexTransform: 
 
 /media/facundo/Datos/LoQueUso/UNSL/2020/Primer-Cuatrimestre/Paralelos/PracticoFinal/COVID-19/omp/main.c
+omp.h
+-
 stdio.h
 -
 stdlib.h
 -
 time.h
--
-omp.h
 -
 person.h
 /media/facundo/Datos/LoQueUso/UNSL/2020/Primer-Cuatrimestre/Paralelos/PracticoFinal/COVID-19/omp/person.h
