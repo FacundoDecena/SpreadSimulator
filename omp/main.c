@@ -19,7 +19,7 @@
 #define ELDER_SUSCEPTIBILITY 0.9    // enhancers
 #define RISK_FACTOR 0.15            // enhancers
 #define VACCINES_BOOST 0.005        // enhancers
-#define SIZE 3                   // Matrix size for rows and columns
+#define SIZE 1500                   // Matrix size for rows and columns
 
 // Returns a initialize person
 Person generatePerson();
@@ -58,12 +58,6 @@ int main() {
     int indexes[9];
     double start, end;
     double cpu_time_used;
-
-    for(i=0;i<SIZE*SIZE;i++){
-        printf("%d ", matrix[i].state);
-        if ((i+1) % SIZE == 0)
-            printf("\n");
-    }
     start = omp_get_wtime();
     for (i = 0; i < DAYS; i++) {
 #pragma omp parallel private(j) firstprivate(indexes, neighborhood) shared(lastMatrix, matrix, i) default(none)
@@ -108,13 +102,6 @@ int main() {
     }
     end = omp_get_wtime();
     cpu_time_used = (end - start);
-
-    for (int k = 0; k < SIZE * SIZE; k++) {
-        printf("%d ", matrix[k].state);
-        if ((k + 1) % SIZE == 0)
-            printf("\n");
-    }
-    printf("\n");
     printf("Tiempo transcurrido: %lf\n\n", cpu_time_used);
     return 0;
 }
