@@ -1,1 +1,1 @@
-/usr/bin/mpicc -O3 -fopenmp -g   CMakeFiles/mpi.dir/main.c.o  -o mpi 
+/usr/bin/mpicc -O3 -fopenmp -g   CMakeFiles/mpi.dir/main.c.o  -o mpi  /usr/lib/x86_64-linux-gnu/openmpi/lib/libmpi.so 

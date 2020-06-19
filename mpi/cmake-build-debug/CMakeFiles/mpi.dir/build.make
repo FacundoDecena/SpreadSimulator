@@ -79,6 +79,7 @@ mpi_EXTERNAL_OBJECTS =
 
 mpi: CMakeFiles/mpi.dir/main.c.o
 mpi: CMakeFiles/mpi.dir/build.make
+mpi: /usr/lib/x86_64-linux-gnu/openmpi/lib/libmpi.so
 mpi: CMakeFiles/mpi.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/media/facundo/Datos/LoQueUso/UNSL/2020/Primer-Cuatrimestre/Paralelos/PracticoFinal/COVID-19/mpi/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C executable mpi"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/mpi.dir/link.txt --verbose=$(VERBOSE)

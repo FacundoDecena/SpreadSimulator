@@ -3,8 +3,17 @@ project(mpi C)
 
 # added optimization
 set(CMAKE_C_FLAGS "-O3")
-# added -fopenmp
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fopenmp")
-set(CMAKE_C_STANDARD 99)
+
+find_package(MPI REQUIRED)
+
+include_directories(${MPI_INCLUDE_PATH})
 
 add_executable(mpi main.c)
+
+target_link_libraries(mpi ${MPI_C_LIBRARIES})
+
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fopenmp")
+
+set(${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} 6)
+
+set(CMAKE_C_STANDARD 99)
