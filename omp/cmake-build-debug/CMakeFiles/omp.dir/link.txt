@@ -1,1 +1,1 @@
-/usr/bin/gcc  -fopenmp -g   CMakeFiles/omp.dir/main.c.o  -o omp 
+/usr/bin/gcc -O3 -fopenmp -g   CMakeFiles/omp.dir/main.c.o  -o omp 
