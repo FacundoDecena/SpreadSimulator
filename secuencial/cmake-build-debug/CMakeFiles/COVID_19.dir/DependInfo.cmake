@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/media/facundo/Datos/LoQueUso/UNSL/2020/Primer-Cuatrimestre/Paralelos/PracticoFinal/COVID-19/main.c" "/media/facundo/Datos/LoQueUso/UNSL/2020/Primer-Cuatrimestre/Paralelos/PracticoFinal/COVID-19/cmake-build-debug/CMakeFiles/COVID_19.dir/main.c.o"
+  "/media/facundo/Datos/LoQueUso/UNSL/2020/Primer-Cuatrimestre/Paralelos/PracticoFinal/COVID-19/secuencial/main.c" "/media/facundo/Datos/LoQueUso/UNSL/2020/Primer-Cuatrimestre/Paralelos/PracticoFinal/COVID-19/secuencial/cmake-build-debug/CMakeFiles/COVID_19.dir/main.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 

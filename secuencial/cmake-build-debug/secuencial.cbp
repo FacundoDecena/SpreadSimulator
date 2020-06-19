@@ -2,7 +2,7 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6"/>
 	<Project>
-		<Option title="COVID_19"/>
+		<Option title="secuencial"/>
 		<Option makefile_is_custom="1"/>
 		<Option compiler="gcc"/>
 		<Option virtualFolders="CMake Files\;"/>
@@ -44,6 +44,8 @@
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include"/>
 					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
 					<Add directory="/usr/local/include"/>
 					<Add directory="/usr/include/x86_64-linux-gnu"/>
@@ -63,6 +65,8 @@
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/openmpi/include"/>
 					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
 					<Add directory="/usr/local/include"/>
 					<Add directory="/usr/include/x86_64-linux-gnu"/>

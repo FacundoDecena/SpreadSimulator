@@ -1,1 +1,1 @@
-/usr/bin/mpicc -O3 -fopenmp -g   CMakeFiles/COVID_19.dir/main.c.o  -o COVID_19 
+/usr/bin/mpicc  -fopenmp -g   CMakeFiles/COVID_19.dir/main.c.o  -o COVID_19 

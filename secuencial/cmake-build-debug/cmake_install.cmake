@@ -1,4 +1,4 @@
-# Install script for directory: /media/facundo/Datos/LoQueUso/UNSL/2020/Primer-Cuatrimestre/Paralelos/PracticoFinal/COVID-19
+# Install script for directory: /media/facundo/Datos/LoQueUso/UNSL/2020/Primer-Cuatrimestre/Paralelos/PracticoFinal/COVID-19/secuencial
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/media/facundo/Datos/LoQueUso/UNSL/2020/Primer-Cuatrimestre/Paralelos/PracticoFinal/COVID-19/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/media/facundo/Datos/LoQueUso/UNSL/2020/Primer-Cuatrimestre/Paralelos/PracticoFinal/COVID-19/secuencial/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

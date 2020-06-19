@@ -44,10 +44,10 @@ RM = /home/facundo/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/201.7846.88/bi
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /media/facundo/Datos/LoQueUso/UNSL/2020/Primer-Cuatrimestre/Paralelos/PracticoFinal/COVID-19
+CMAKE_SOURCE_DIR = /media/facundo/Datos/LoQueUso/UNSL/2020/Primer-Cuatrimestre/Paralelos/PracticoFinal/COVID-19/secuencial
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /media/facundo/Datos/LoQueUso/UNSL/2020/Primer-Cuatrimestre/Paralelos/PracticoFinal/COVID-19/cmake-build-debug
+CMAKE_BINARY_DIR = /media/facundo/Datos/LoQueUso/UNSL/2020/Primer-Cuatrimestre/Paralelos/PracticoFinal/COVID-19/secuencial/cmake-build-debug
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -74,14 +74,14 @@ clean: CMakeFiles/COVID_19.dir/clean
 CMakeFiles/COVID_19.dir/all:
 	$(MAKE) -f CMakeFiles/COVID_19.dir/build.make CMakeFiles/COVID_19.dir/depend
 	$(MAKE) -f CMakeFiles/COVID_19.dir/build.make CMakeFiles/COVID_19.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/media/facundo/Datos/LoQueUso/UNSL/2020/Primer-Cuatrimestre/Paralelos/PracticoFinal/COVID-19/cmake-build-debug/CMakeFiles --progress-num=1,2 "Built target COVID_19"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/media/facundo/Datos/LoQueUso/UNSL/2020/Primer-Cuatrimestre/Paralelos/PracticoFinal/COVID-19/secuencial/cmake-build-debug/CMakeFiles --progress-num=1,2 "Built target COVID_19"
 .PHONY : CMakeFiles/COVID_19.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/COVID_19.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /media/facundo/Datos/LoQueUso/UNSL/2020/Primer-Cuatrimestre/Paralelos/PracticoFinal/COVID-19/cmake-build-debug/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /media/facundo/Datos/LoQueUso/UNSL/2020/Primer-Cuatrimestre/Paralelos/PracticoFinal/COVID-19/secuencial/cmake-build-debug/CMakeFiles 2
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/COVID_19.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /media/facundo/Datos/LoQueUso/UNSL/2020/Primer-Cuatrimestre/Paralelos/PracticoFinal/COVID-19/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /media/facundo/Datos/LoQueUso/UNSL/2020/Primer-Cuatrimestre/Paralelos/PracticoFinal/COVID-19/secuencial/cmake-build-debug/CMakeFiles 0
 .PHONY : CMakeFiles/COVID_19.dir/rule
 
 # Convenience name for target.
