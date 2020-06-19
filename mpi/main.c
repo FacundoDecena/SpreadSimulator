@@ -22,7 +22,7 @@
 #define ELDER_SUSCEPTIBILITY 0.9    // enhancers
 #define RISK_FACTOR 0.15            // enhancers
 #define VACCINES_BOOST 0.005        // enhancers
-#define SIZE 1500                   // Matrix size for rows and columns
+#define SIZE 24                   // Matrix size for rows and columns
 
 // Returns a initialize person
 Person generatePerson();
@@ -110,69 +110,78 @@ int main() {
     if (myRank == MASTER) {
         matrix = (Person *) malloc((size_t) (SIZE + 2) * SIZE * sizeof(Person));
         lastMatrix = (Person *) malloc((size_t) (SIZE + 2) * SIZE * sizeof(Person));
-        init(&matrix[SIZE]);
-        memcpy(matrix, &matrix[SIZE * SIZE], (size_t) SIZE * sizeof(Person));
-        memcpy(&matrix[(SIZE + 1) * SIZE], &matrix[SIZE], (size_t) SIZE * sizeof(Person));
+        init(&lastMatrix[SIZE]);
+        memcpy(lastMatrix, &lastMatrix[SIZE * SIZE], (size_t) SIZE * sizeof(Person));
+        memcpy(&lastMatrix[(SIZE + 1) * SIZE], &lastMatrix[SIZE], (size_t) SIZE * sizeof(Person));
         sendCounts = malloc((size_t) nprocs * sizeof(int));
         recvCounts = malloc((size_t) nprocs * sizeof(int));
         displacements = malloc((size_t) nprocs * sizeof(int));
         for (int i = 0; i < nprocs; i++) {
-            // All procs work with the same number of rows
             sendCounts[i] = rowsPerProcessor * SIZE;
             recvCounts[i] = (rowsPerProcessor - 2) * SIZE;
             displacements[i] = i * (rowsPerProcessor - 2) * SIZE;
         }
     }
     Person *myNeighborhood[9];
-    if (myRank == MASTER)
+    if (myRank == MASTER) {
+        /*
+         * Uncomment to print
+         * for (int index = 0; index < SIZE * SIZE; ++index) {
+            printf("%d ", lastMatrix[index].state);
+                    if ((index + 1) % SIZE == 0)
+                        printf("\n");
+        }
+        printf("\n");*/
         start = omp_get_wtime();
+    }
     for (i = 0; i < DAYS; i++) {
         MPI_Scatterv(
-                matrix,
+                lastMatrix,
                 sendCounts,
                 displacements,
                 MPI_PERSON,
-                myMatrix,
+                myLastMatrix,
                 rowsPerProcessor * SIZE,
                 MPI_PERSON,
                 0,
                 MPI_COMM_WORLD
         );
 
-        memcpy(myLastMatrix, myMatrix, (size_t) (rowsPerProcessor * SIZE) * sizeof(Person));
+        memcpy(myMatrix, myLastMatrix, (size_t) (rowsPerProcessor * SIZE) * sizeof(Person));
 
         for (k = 0; k < rowsPerProcessor - 1; ++k) {
             for (j = 0; j < SIZE; j++) {
-                switch (myLastMatrix[SIZE+(k*SIZE)+j].state) {
+                Person *current = &myMatrix[SIZE+(k*SIZE)+j];
+                switch (current->state) {
                     case freeCell:
                         continue;
                     case susceptible:
                         neighbors(myLastMatrix, rowsPerProcessor, j, k+1, myNeighborhood);
-                        susToSick(myNeighborhood, myNeighborhood[4]);
+                        susToSick(myNeighborhood, current);
                         break;
                     case sickNoContagion:
-                        myNeighborhood[4]->days++;
-                        noConToCon(myNeighborhood[4]);
+                        current->days++;
+                        noConToCon(current);
                         break;
                     case sickContagion:
-                        myNeighborhood[4]->days++;
-                        conToAis(myNeighborhood[4]);
+                        current->days++;
+                        conToAis(current);
                         break;
                     case isolatedSick:
-                        myNeighborhood[4]->days++;
+                        current->days++;
                         break;
                     default:
                         break;
                 }
-                sickToD_or_R(myNeighborhood[4]);
+                sickToD_or_R(current);
             }
         }
 
         MPI_Gatherv(
-                &myLastMatrix[SIZE],
+                &myMatrix[SIZE],
                 (rowsPerProcessor - 2) * SIZE,
                 MPI_PERSON,
-                &lastMatrix[SIZE],
+                &matrix[SIZE],
                 recvCounts,
                 displacements,
                 MPI_PERSON,
@@ -180,14 +189,14 @@ int main() {
                 MPI_COMM_WORLD
         );
 
-        void *myTemp = myMatrix;
-        myMatrix = myLastMatrix;
-        myLastMatrix = myTemp;
+        void *myTemp = myLastMatrix;
+        myLastMatrix = myMatrix;
+        myMatrix = myTemp;
 
         if (myRank == MASTER) {
-            void *temp = matrix;
-            matrix = lastMatrix;
-            lastMatrix = temp;
+            void *temp = lastMatrix;
+            lastMatrix = matrix;
+            matrix = temp;
         }
     }
 
@@ -195,6 +204,14 @@ int main() {
     if (myRank == MASTER) {
         end = omp_get_wtime();
         cpu_time_used = end - start;
+        /*
+         * Uncomment to print
+         * for (int index = 0; index < SIZE * SIZE; ++index) {
+            printf("%d ", matrix[index].state);
+            if ((index + 1) % SIZE == 0)
+                printf("\n");
+        }
+        printf("\n");*/
         printf("Tiempo transcurrido: %lf\n\n", cpu_time_used);
 
         free(matrix);
