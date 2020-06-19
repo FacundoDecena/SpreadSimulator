@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <omp.h>
 #include <time.h>
 #include "person.h"
@@ -51,9 +52,8 @@ int main()
 {
     int i, j;
     Person *matrix = (Person *)malloc(sizeof(Person) * SIZE * SIZE);
-    Person *lastMatrix;
-    init(matrix);
-    lastMatrix = matrix;
+    Person *lastMatrix = (Person *)malloc(sizeof(Person) * SIZE * SIZE);
+    init(lastMatrix);
     srand(time(0));
     Person *neighborhood = (Person *)malloc(sizeof(Person) * 9);
     int indexes[9];
@@ -108,11 +108,15 @@ int main()
         //            printf("\n");
         //            printf("\n");
         //        }
-        lastMatrix = matrix;
+        memcpy(lastMatrix, matrix, (size_t)(SIZE * SIZE) * sizeof(Person));
     }
     end = omp_get_wtime();
     cpu_time_used = end - start;
     printf("Tiempo transcurrido: %lf\n\n", cpu_time_used);
+
+    free(matrix);
+    free(lastMatrix);
+    free(neighborhood);
 
     return 0;
 }
