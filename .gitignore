@@ -1,0 +1,6 @@
+build/hybrid
+build/mpi
+build/omp
+build/secuencial
+
+.vscode/
