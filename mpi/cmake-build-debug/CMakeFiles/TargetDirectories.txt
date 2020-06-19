@@ -1,0 +1,3 @@
+/media/facundo/Datos/LoQueUso/UNSL/2020/Primer-Cuatrimestre/Paralelos/PracticoFinal/COVID-19/mpi/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/media/facundo/Datos/LoQueUso/UNSL/2020/Primer-Cuatrimestre/Paralelos/PracticoFinal/COVID-19/mpi/cmake-build-debug/CMakeFiles/edit_cache.dir
+/media/facundo/Datos/LoQueUso/UNSL/2020/Primer-Cuatrimestre/Paralelos/PracticoFinal/COVID-19/mpi/cmake-build-debug/CMakeFiles/mpi.dir
