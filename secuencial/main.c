@@ -136,7 +136,7 @@ Person generatePerson()
         return p;
     }
 
-    ran = (double)random() / (double)RAND_MAX;
+    ran = (double)rand() / (double)RAND_MAX;
     if (ran < KIDS)
         p.age = kid;
     else if (ran < KIDS + ADULTS)
@@ -144,31 +144,31 @@ Person generatePerson()
     else
         p.age = elder;
 
-    ran = (double)random() / (double)RAND_MAX;
+    ran = (double)rand() / (double)RAND_MAX;
     if (ran < 0.5)
         p.riskDisease = FALSE;
     else
         p.riskDisease = TRUE;
 
-    ran = (double)random() / (double)RAND_MAX;
+    ran = (double)rand() / (double)RAND_MAX;
     if (ran < 0.5)
         p.riskProfession = FALSE;
     else
         p.riskProfession = TRUE;
 
-    ran = (double)random() / (double)RAND_MAX;
+    ran = (double)rand() / (double)RAND_MAX;
     if (ran < 0.5)
         p.sex = man;
     else
         p.sex = woman;
 
-    ran = (double)random() / (double)RAND_MAX;
+    ran = (double)rand() / (double)RAND_MAX;
     if (ran < 0.5)
         p.vaccines = TRUE;
     else
         p.vaccines = FALSE;
 
-    ran = (double)random() / (double)RAND_MAX;
+    ran = (double)rand() / (double)RAND_MAX;
     if (ran < INITIAL_INFECTION)
         p.state = sickContagion;
     else
@@ -304,7 +304,7 @@ int susToSick(Person *matrix, Person *p)
         probContagion /= 7;
     }
 
-    if ((double)random() / (double)RAND_MAX < probContagion)
+    if ((double)rand() / (double)RAND_MAX < probContagion)
     {
         p->state = sickNoContagion;
         return TRUE;
@@ -324,10 +324,10 @@ int noConToCon(Person *p)
 
 int conToAis(Person *p)
 {
-    double rand = (double)random() / (double)RAND_MAX;
+    double ran = (double)rand() / (double)RAND_MAX;
     if (p->days == 7)
     {
-        if (rand > 0.1)
+        if (ran > 0.1)
         {
             p->state = isolatedSick;
             return TRUE;
@@ -338,7 +338,7 @@ int conToAis(Person *p)
 
 int sickToD_or_R(Person *p)
 {
-    double rand = (double)random() / (double)RAND_MAX;
+    double ran = (double)rand() / (double)RAND_MAX;
     if (p->days == 14)
     {
         double probDead;
@@ -355,7 +355,7 @@ int sickToD_or_R(Person *p)
         }
         if (p->vaccines)
             probDead -= VACCINES_BOOST;
-        if (rand < probDead)
+        if (ran < probDead)
         {
             p->state = dead;
             return TRUE;
