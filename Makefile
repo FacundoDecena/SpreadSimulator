@@ -3,6 +3,7 @@ SHELL=/bin/bash
 # constants
 np = 16
 npl = 6
+mph = 2
 CC = gcc
 MPCC = mpicc
 MPR = mpirun
@@ -29,6 +30,6 @@ mpi:
 	${MPR} -np ${npl} ./build/mpi
 	
 hybrid:
-	${MPR} -np ${npl} ./build/hybrid
+	${MPR} -np ${mph} ./build/hybrid
 
 .PHONY: secuencial omp mpi hybrid

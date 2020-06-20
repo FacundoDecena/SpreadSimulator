@@ -22,7 +22,7 @@
 #define ELDER_SUSCEPTIBILITY 0.9 // enhancers
 #define RISK_FACTOR 0.15         // enhancers
 #define VACCINES_BOOST 0.005     // enhancers
-#define SIZE 24                  // Matrix size for rows and columns
+#define SIZE 1500                // Matrix size for rows and columns
 
 // Returns a initialize person
 Person generatePerson();
@@ -55,7 +55,7 @@ int main()
 {
     int i, j, k;
     double start, end;
-    double cpu_time_used;
+    double cpu_time_used, sum;
     int nprocs, myRank;
 
     srandom(time(0));
@@ -126,93 +126,100 @@ int main()
         }
     }
     Person *myNeighborhood[9];
-    if (myRank == MASTER)
+    for (int numRep = 0; numRep < 10; numRep++)
     {
-        /*/Uncomment to print
-        for (int index = 0; index < SIZE * SIZE; ++index) {
-            printf("%d ", lastMatrix[index].state);
-                    if ((index + 1) % SIZE == 0)
-                        printf("\n");
-        }
-        printf("\n");
-        /*/
-        start = omp_get_wtime();
-    }
-    for (i = 0; i < DAYS; i++)
-    {
-        MPI_Scatterv(
-            lastMatrix,
-            sendCounts,
-            displacements,
-            MPI_PERSON,
-            myLastMatrix,
-            rowsPerProcessor * SIZE,
-            MPI_PERSON,
-            0,
-            MPI_COMM_WORLD);
-
-        memcpy(myMatrix, myLastMatrix, (size_t)(rowsPerProcessor * SIZE) * sizeof(Person));
-
-#pragma omp parallel for collapse(2)
-        for (k = 0; k < rowsPerProcessor - 1; ++k)
+        if (myRank == MASTER)
         {
-            for (j = 0; j < SIZE; j++)
+            /*/Uncomment to print
+            for (int index = 0; index < SIZE * SIZE; ++index) {
+                printf("%d ", lastMatrix[index].state);
+                        if ((index + 1) % SIZE == 0)
+                            printf("\n");
+            }
+            printf("\n");
+            /*/
+            start = omp_get_wtime();
+        }
+        for (i = 0; i < DAYS; i++)
+        {
+            MPI_Scatterv(
+                lastMatrix,
+                sendCounts,
+                displacements,
+                MPI_PERSON,
+                myLastMatrix,
+                rowsPerProcessor * SIZE,
+                MPI_PERSON,
+                0,
+                MPI_COMM_WORLD);
+
+            memcpy(myMatrix, myLastMatrix, (size_t)(rowsPerProcessor * SIZE) * sizeof(Person));
+
+#pragma omp parallel for collapse(2) schedule(static, 3)
+            for (k = 0; k < rowsPerProcessor - 1; ++k)
             {
-                Person *current = &myMatrix[SIZE + (k * SIZE) + j];
-                switch (current->state)
+                for (j = 0; j < SIZE; j++)
                 {
-                case freeCell:
-                    continue;
-                case susceptible:
-                    neighbors(myLastMatrix, rowsPerProcessor, j, k + 1, myNeighborhood);
-                    susToSick(myNeighborhood, current);
-                    break;
-                case sickNoContagion:
-                    current->days++;
-                    noConToCon(current);
-                    break;
-                case sickContagion:
-                    current->days++;
-                    conToAis(current);
-                    break;
-                case isolatedSick:
-                    current->days++;
-                    break;
-                default:
-                    break;
+                    Person *current = &myMatrix[SIZE + (k * SIZE) + j];
+                    switch (current->state)
+                    {
+                    case freeCell:
+                        continue;
+                    case susceptible:
+                        neighbors(myLastMatrix, rowsPerProcessor, j, k + 1, myNeighborhood);
+                        susToSick(myNeighborhood, current);
+                        break;
+                    case sickNoContagion:
+                        current->days++;
+                        noConToCon(current);
+                        break;
+                    case sickContagion:
+                        current->days++;
+                        conToAis(current);
+                        break;
+                    case isolatedSick:
+                        current->days++;
+                        break;
+                    default:
+                        break;
+                    }
+                    sickToD_or_R(current);
                 }
-                sickToD_or_R(current);
+            }
+
+            MPI_Gatherv(
+                &myMatrix[SIZE],
+                (rowsPerProcessor - 2) * SIZE,
+                MPI_PERSON,
+                &matrix[SIZE],
+                recvCounts,
+                displacements,
+                MPI_PERSON,
+                0,
+                MPI_COMM_WORLD);
+
+            void *myTemp = myLastMatrix;
+            myLastMatrix = myMatrix;
+            myMatrix = myTemp;
+
+            if (myRank == MASTER)
+            {
+                void *temp = lastMatrix;
+                lastMatrix = matrix;
+                matrix = temp;
             }
         }
 
-        MPI_Gatherv(
-            &myMatrix[SIZE],
-            (rowsPerProcessor - 2) * SIZE,
-            MPI_PERSON,
-            &matrix[SIZE],
-            recvCounts,
-            displacements,
-            MPI_PERSON,
-            0,
-            MPI_COMM_WORLD);
-
-        void *myTemp = myLastMatrix;
-        myLastMatrix = myMatrix;
-        myMatrix = myTemp;
-
+        //MPI_Barrier(MPI_COMM_WORLD);
         if (myRank == MASTER)
         {
-            void *temp = lastMatrix;
-            lastMatrix = matrix;
-            matrix = temp;
+            end = omp_get_wtime();
+            cpu_time_used = end - start;
+            sum += cpu_time_used;
         }
     }
-
-    MPI_Barrier(MPI_COMM_WORLD);
     if (myRank == MASTER)
     {
-        end = omp_get_wtime();
-        cpu_time_used = end - start;
         /*/Uncomment to print
         for (int index = 0; index < SIZE * SIZE; ++index) {
             printf("%d ", matrix[index].state);
@@ -221,7 +228,7 @@ int main()
         }
         printf("\n");
         /*/
-        printf("Tiempo transcurrido: %lf\n\n", cpu_time_used);
+        printf("Tiempo promedio: %lf\n\n", sum/10);
 
         free(matrix);
         free(lastMatrix);

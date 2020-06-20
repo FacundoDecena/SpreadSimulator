@@ -57,62 +57,67 @@ int main()
     srand(time(0));
     Person *neighborhood = (Person *)malloc(sizeof(Person) * 9);
     int indexes[9];
-    double start, end;
+    double start, end, sum = 0.0;
     double cpu_time_used;
 
-    start = omp_get_wtime();
-    for (i = 0; i < DAYS; i++)
+    for (int numRep = 0; numRep < 10; numRep++)
     {
-        for (j = 0; j < SIZE * SIZE; j++)
+        start = omp_get_wtime();
+        for (i = 0; i < DAYS; i++)
         {
-            neighbors(j, indexes);
-            neighborhood[0] = lastMatrix[indexes[0]];
-            neighborhood[1] = lastMatrix[indexes[1]];
-            neighborhood[2] = lastMatrix[indexes[2]];
-            neighborhood[3] = lastMatrix[indexes[3]];
-            neighborhood[4] = lastMatrix[indexes[4]];
-            neighborhood[5] = lastMatrix[indexes[5]];
-            neighborhood[6] = lastMatrix[indexes[6]];
-            neighborhood[7] = lastMatrix[indexes[7]];
-            neighborhood[8] = lastMatrix[indexes[8]];
-            //            if (i == 0||i == DAYS - 1) {
-            //                printf("%d ", neighborhood[4].state);
-            //                if ((j+1) % SIZE == 0)
-            //                    printf("\n");
-            //            }
-            switch (neighborhood[4].state)
+            for (j = 0; j < SIZE * SIZE; j++)
             {
-            case freeCell:
-                continue;
-            case susceptible:
-                susToSick(neighborhood, &neighborhood[4]);
-                break;
-            case sickNoContagion:
-                neighborhood[4].days++;
-                noConToCon(&neighborhood[4]);
-                break;
-            case sickContagion:
-                neighborhood[4].days++;
-                conToAis(&neighborhood[4]);
-                break;
-            case isolatedSick:
-                neighborhood[4].days++;
-                break;
-            default:
-                break;
+                neighbors(j, indexes);
+                neighborhood[0] = lastMatrix[indexes[0]];
+                neighborhood[1] = lastMatrix[indexes[1]];
+                neighborhood[2] = lastMatrix[indexes[2]];
+                neighborhood[3] = lastMatrix[indexes[3]];
+                neighborhood[4] = lastMatrix[indexes[4]];
+                neighborhood[5] = lastMatrix[indexes[5]];
+                neighborhood[6] = lastMatrix[indexes[6]];
+                neighborhood[7] = lastMatrix[indexes[7]];
+                neighborhood[8] = lastMatrix[indexes[8]];
+                //            if (i == 0||i == DAYS - 1) {
+                //                printf("%d ", neighborhood[4].state);
+                //                if ((j+1) % SIZE == 0)
+                //                    printf("\n");
+                //            }
+                switch (neighborhood[4].state)
+                {
+                case freeCell:
+                    continue;
+                case susceptible:
+                    susToSick(neighborhood, &neighborhood[4]);
+                    break;
+                case sickNoContagion:
+                    neighborhood[4].days++;
+                    noConToCon(&neighborhood[4]);
+                    break;
+                case sickContagion:
+                    neighborhood[4].days++;
+                    conToAis(&neighborhood[4]);
+                    break;
+                case isolatedSick:
+                    neighborhood[4].days++;
+                    break;
+                default:
+                    break;
+                }
+                sickToD_or_R(&neighborhood[4]);
+                matrix[j] = neighborhood[4];
             }
-            sickToD_or_R(&neighborhood[4]);
-            matrix[j] = neighborhood[4];
+            //        if (i == DAYS - 2) {
+            //            printf("\n");
+            //            printf("\n");
+            //        }
+            memcpy(lastMatrix, matrix, (size_t)(SIZE * SIZE) * sizeof(Person));
         }
-        //        if (i == DAYS - 2) {
-        //            printf("\n");
-        //            printf("\n");
-        //        }
-        memcpy(lastMatrix, matrix, (size_t)(SIZE * SIZE) * sizeof(Person));
+        end = omp_get_wtime();
+        cpu_time_used = end - start;
+        sum += cpu_time_used;
     }
-    end = omp_get_wtime();
-    cpu_time_used = end - start;
-    printf("Tiempo transcurrido: %lf\n\n", cpu_time_used);
+
+    printf("Tiempo promedio: %lf\n\n", sum/10);
 
     free(matrix);
     free(lastMatrix);
